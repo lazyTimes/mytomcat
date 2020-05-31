@@ -25,6 +25,8 @@ public class HttpResponse implements ServletResponse {
      */
     private OutputStream outputStream;
 
+    PrintWriter writer;
+
     /**
      * 缓冲区大小
      */
@@ -99,7 +101,8 @@ public class HttpResponse implements ServletResponse {
 
     @Override
     public PrintWriter getWriter() throws IOException {
-        return new PrintWriter(outputStream,true);
+        this.writer = new PrintWriter(this.outputStream, true);
+        return this.writer;
     }
 
     @Override

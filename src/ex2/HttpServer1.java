@@ -57,6 +57,8 @@ public class HttpServer1 {
                 // 设置静态资源
                 httpResponse.setRequest(httpRequest);
                 httpResponse.setResource();
+
+
                 // 根据不同到情况处理
                 if(httpRequest.getUri().startsWith("/servlet/")){
                     ServletProcess servletProcess = new ServletProcess();

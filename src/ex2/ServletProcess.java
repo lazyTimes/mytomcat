@@ -15,36 +15,38 @@ import java.net.URLStreamHandler;
  * @create: 2020-05-29 22:19
  **/
 public class ServletProcess {
-    public void process(HttpRequest request, HttpResponse response){
+    public void process(HttpRequest request, HttpResponse response) {
         String uri = request.getUri();
-        String serveletName = uri.substring(uri.lastIndexOf("/" + 1));
+        String serveletName = uri.substring(uri.lastIndexOf("/") + 1);
         // 创建Url加载器
         URL[] urls = new URL[1];
-        URLStreamHandler streamHandler = null;
         File classPath = new File(Constants.WEBROOT);
         URLClassLoader loader = null;
         try {
-            String repository = (new URL("file", null, classPath.getCanonicalPath()+File.separator)).toString();
+            URLStreamHandler streamHandler = null;
+            String repository = (new URL("file", null, classPath.getCanonicalPath() + File.separator)).toString();
             urls[0] = new URL(null, repository, streamHandler);
             loader = new URLClassLoader(urls);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
         Class myclass = null;
         try {
             myclass = loader.loadClass(serveletName);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
 
         Servlet servlet = null;
-
+        //使用face 封装
+        RequestFace requestFace = new RequestFace(request);
+        ResponseFace responseFace = new ResponseFace(response);
         try {
             servlet = (Servlet) myclass.newInstance();
-            servlet.service(request, response);
-            
+            servlet.service(requestFace, responseFace);
+
         } catch (InstantiationException | IllegalAccessException | ServletException | IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
 
     }
