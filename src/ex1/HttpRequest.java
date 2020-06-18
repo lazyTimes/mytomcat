@@ -54,6 +54,7 @@ public class HttpRequest {
         }
         //读取byte数组的数据进入到stringbuffer
         for (int i = 0; i < read; i++) {
+
             stringBuffer.append((char)byteBuffer[i]);
         }
         // 打印stringbuffer
